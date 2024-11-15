@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Property QR Code Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1c20 0%, #0f1114 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            width: 80%;
+            max-width: 800px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #6e48aa, #9d50bb);
+            border: none;
+            padding: 12px 30px;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        #qrcode-container {
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        #qrcode-image {
+            max-width: 300px;
+            margin: 20px auto;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            color: white;
+            background: #6e48aa;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generate Property QR Code</h1>
+        <div class="form-group">
+            <label for="propertyInfo">Property Information:</label>
+            <textarea id="propertyInfo" placeholder="Enter detailed information about your property (description, features, price, location, etc.)"></textarea>
+        </div>
+        <button onclick="generateQRCode()">Generate QR Code</button>
+        
+        <div id="qrcode-container">
+            <img id="qrcode-image" alt="QR Code">
+            <br>
+            <a id="download-link" class="download-btn" href="#" download="property-qr.png">
+                Download QR Code
+            </a>
+        </div>
+    </div>
+
+    <script>
+        async function generateQRCode() {
+            const propertyInfo = document.getElementById('propertyInfo').value;
+            if (!propertyInfo.trim()) {
+                alert('Please enter property information');
+                return;
+            }
+
+            try {
+                const response = await fetch('/generate-qr', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ propertyInfo })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    const qrContainer = document.getElementById('qrcode-container');
+                    const qrImage = document.getElementById('qrcode-image');
+                    const downloadLink = document.getElementById('download-link');
+                    
+                    qrImage.src = data.qrCode;
+                    downloadLink.href = data.qrCode;
+                    qrContainer.style.display = 'block';
+                } else {
+                    alert('Error generating QR code');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error generating QR code');
+            }
+        }
+    </script>
+</body>
+</html>

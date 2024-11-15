@@ -1,0 +1,940 @@
+<html><head><base href="." />
+  <title>QR Chat Assistant</title>
+  <style>
+    /* Je vois que vous souhaitez pousser encore plus loin le design et l'animation.
+       Je vais conserver la base de votre code et y ajouter des éléments plus avancés
+       et bluffants. Je continuerai dans le prochain message car la réponse est longue. */
+  
+    /* Base styles restent les mêmes */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .description,h3,p {
+    color: white;
+   }
+
+  
+    .background {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, 
+        #0a0a0a,
+        #1a1a1a,
+        #2a2a2a,
+        #1a1a1a
+      );
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      z-index: -1;
+    }
+  
+    /* Nouvelles animations et effets */
+    @keyframes floating {
+      0% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(5deg);
+      }
+      100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+    }
+  
+    .glow-effect {
+      position: relative;
+      color: white;
+      text-decoration: none;
+      padding: 15px 30px;
+      --glow-line-color: #fff;
+      --glow-line-thickness: 2px;
+      --glow-line-length: 20px;
+      --glow-blur-color: #fff;
+      --glow-blur-size: 5px;
+      --glow-offset: 0px;
+      --animation-speed: 1200ms;
+      /* à continuer... */
+    }
+  
+    .testimonial {
+      position: relative;
+      padding: 2rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+  
+    .testimonial::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b1ff, #a26bff);
+      border-radius: 16px;
+      z-index: -1;
+      filter: blur(10px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+  
+    .testimonial:hover {
+      transform: translateY(-10px) scale(1.02);
+    }
+  
+    .testimonial:hover::before {
+      opacity: 1;
+    }
+  
+    /* Nouveau style pour le formulaire de contact */
+    .contact-form {
+      position: relative;
+      width: 90%;
+      max-width: 500px;
+      margin: 100px auto 50px auto;
+      background: #2A2A2A;
+      border-radius: 15px;
+      padding: 2.5rem;
+      border: none;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+  
+    .contact-form h3 {
+      color: white;
+      margin-bottom: 2rem;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+  
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+  
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      background: #363636;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+    }
+  
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #999;
+    }
+  
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: #45B1E8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+  
+    .submit-btn:hover {
+      background: #3399cc;
+    }
+  
+    /* Remove hover animation */
+    .contact-form:hover {
+      transform: none;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+  
+    /* Nouveau bouton pricing */
+    .pricing-button {
+      position: fixed;
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      padding: 20px 40px;
+      border-radius: 50px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      z-index: 100;
+    }
+  
+    .pricing-button::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b1ff, #a26bff);
+      border-radius: 50px;
+      z-index: -1;
+      filter: blur(10px);
+      animation: borderGlow 3s linear infinite;
+    }
+  
+    @keyframes borderGlow {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+  
+    .pricing-button:hover {
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 0 30px rgba(78,205,196,0.5);
+    }
+  
+    /* Ajout d'éléments flottants */
+    .floating-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+  
+    .floating-element {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: float 10s infinite;
+    }
+  
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(100px, 100px) rotate(90deg);
+      }
+      50% {
+        transform: translate(200px, 0) rotate(180deg);
+      }
+      75% {
+        transform: translate(100px, -100px) rotate(270deg);
+      }
+    }
+  
+    /* Additional animations and effects */
+    .hero-section {
+      perspective: 1000px;
+      transform-style: preserve-3d;
+      padding: 4rem 2rem;
+    }
+  
+    .content {
+      transition: transform 0.5s ease;
+    }
+  
+    /* Elegant ripple effect for buttons */
+    .submit-btn {
+      position: relative;
+      background: linear-gradient(45deg, #4ecdc4, #45b1ff);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+  
+    .submit-btn:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+  
+    .submit-btn:hover:after {
+      width: 300px;
+      height: 300px;
+    }
+  
+    /* Enhanced feature cards */
+    .feature {
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 1rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+  
+    .feature:hover {
+      transform: translateY(-10px);
+      background: rgba(255,255,255,0.1);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+  
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: all 0.3s ease;
+    }
+  
+    .feature:hover .feature-icon {
+      transform: scale(1.2) rotate(10deg);
+    }
+  
+    /* 3D Card effect for testimonials */
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      perspective: 1000px;
+    }
+  
+    .testimonial {
+      transform: rotateX(10deg);
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  
+    .testimonial:hover {
+      transform: rotateX(0deg) scale(1.05);
+    }
+  
+    /* Animated gradient text */
+    h1 {
+
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b1ff, #a26bff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 300% 300%;
+      animation: gradientText 5s ease infinite;
+    }
+  
+    @keyframes gradientText {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+  
+    /* Glowing dots navigation */
+    .dots-nav {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      z-index: 1000;
+    }
+  
+    .dot {
+      width: 10px;
+      height: 10px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+  
+    .dot:hover, .dot.active {
+      background: #4ecdc4;
+      box-shadow: 0 0 15px #4ecdc4;
+      transform: scale(1.5);
+    }
+  
+    /* Pricing Section Styles */
+    .pricing-section {
+      padding: 4rem 2rem;
+      margin-bottom: 50px; /* Reduce bottom margin */
+    }
+  
+    .pricing-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  
+    .pricing-container h2 {
+      text-align: center;
+      color: white;
+      margin-bottom: 3rem;
+      font-size: 2.5rem;
+    }
+  
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 1rem;
+    }
+  
+    .pricing-card {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      color: white;
+      position: relative;
+      transition: transform 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+  
+    .pricing-card:hover {
+      transform: translateY(-10px);
+    }
+  
+    .pricing-card.featured {
+      background: rgba(78,205,196,0.1);
+      border: 1px solid #4ecdc4;
+    }
+  
+    .popular-badge {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      background: #4ecdc4;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+  
+    .pricing-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+  
+    .price {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin: 1.5rem 0;
+    }
+  
+    .price span {
+      font-size: 1rem;
+      opacity: 0.7;
+    }
+  
+    .pricing-card ul {
+      list-style: none;
+      margin: 2rem 0;
+      text-align: left;
+    }
+  
+    .pricing-card li {
+      margin: 1rem 0;
+    }
+  
+    .pricing-card li i {
+      color: #4ecdc4;
+      margin-right: 10px;
+    }
+  
+    .plan-btn {
+      background: linear-gradient(45deg, #4ecdc4, #45b1ff);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 30px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+  
+    .plan-btn:hover {
+      transform: scale(1.05);
+    }
+  
+    /* Add new styles for the try now button and google login */
+    .try-now-btn {
+      position: fixed;
+      left: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      padding: 20px 40px;
+      border-radius: 50px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 100;
+    }
+  
+    .try-now-btn:hover {
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 0 30px rgba(78,205,196,0.5);
+    }
+  
+    .google-login-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      text-align: center;
+    }
+  
+    .google-btn {
+      background: white;
+      color: #444;
+      padding: 15px 25px;
+      border-radius: 30px;
+      border: none;
+      font-size: 16px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+  
+    .google-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+  
+    .google-btn img {
+      width: 20px;
+      height: 20px;
+    }
+  
+    .hide {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+
+    /* video dmonstration */
+  .how-it-works {
+    padding: 4rem 2rem;
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  .how-it-works h2 {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b1ff, #a26bff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .video-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .video-container:hover {
+    transform: translateY(-10px);
+  }
+
+  .video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 15px;
+  }
+
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+
+  .footer {
+    background: rgba(0,0,0,0.5);
+    padding: 2rem 0;
+    text-align: center;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .social-link {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    color: white;
+    text-decoration: none;
+  }
+
+  .social-link:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.2);
+  }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  </head>
+  <body>
+  <div class="background"></div>
+  <div class="floating-elements"></div>
+  
+  <div class="hero-section">
+    <div class="content">
+      <div class="left-content">
+        <h1>QR Chat Assistant</h1>
+        <p class="description">
+          Une nouvelle ère de communication intelligente. Découvrez la puissance de l'IA 
+          combinée à la simplicité des QR codes.
+        </p>
+        
+        <div class="features">
+          <div class="feature">
+            <i class="fas fa-qrcode feature-icon"></i>
+            <h3>Scan Intelligent</h3>
+            <p>Analyse instantanée et précise</p>
+          </div>
+          <div class="feature">
+            <i class="fas fa-brain feature-icon"></i>
+            <h3>IA Évolutive</h3>
+            <p>Apprentissage continu</p>
+          </div>
+          <div class="feature">
+            <i class="fas fa-headset feature-icon"></i> <!-- Icône de support client -->
+            <h3>Avatar IA de Vente</h3>
+            <p>Assistance continue pour vos ventes</p>
+        </div>
+        
+          <div class="feature">
+            <i class="fas fa-lock feature-icon"></i>
+            <h3>Sécurité Maximum</h3>
+            <p>Cryptage de bout en bout</p>
+          </div>
+          <div class="feature">
+            <i class="fas fa-cloud feature-icon"></i>
+            <h3>Cloud Intégré</h3>
+            <p>Synchronisation temps réel</p>
+          </div>
+        </div>
+  
+        <div class="testimonials">
+          <div class="testimonial">
+            <p>"Une révolution dans notre workflow quotidien!"</p>
+            <p class="testimonial-author">- Sophie M.</p>
+          </div>
+          <div class="testimonial">
+            <p>"L'interface la plus intuitive que j'ai jamais utilisée."</p>
+            <p class="testimonial-author">- Jean-Pierre D.</p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="right-content">
+        <div class="demo-container">
+          <video class="demo-video" autoplay loop muted playsinline>
+            <source src="/videos/french7.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <button class="try-now-btn">Essayer Maintenant</button>
+  
+  <a href="#pricing" class="pricing-button">
+    Découvrir nos tarifs
+  </a>
+  
+  <section id="pricing" class="pricing-section">
+    <div class="pricing-container">
+      <h2>Nos Plans</h2>
+      <div class="pricing-cards">
+        <div class="pricing-card">
+          <h3>Starter</h3>
+          <div class="price">19€<span>/mois</span></div>
+          <ul>
+            <li><i class="fas fa-check"></i> 100 scans/mois</li>
+            <li><i class="fas fa-check"></i> Support basique</li>
+            <li><i class="fas fa-check"></i> 1 utilisateur</li>
+          </ul>
+          <button class="plan-btn">Choisir</button>
+        </div>
+        <div class="pricing-card featured">
+          <div class="popular-badge">Plus Populaire</div>
+          <h3>Pro</h3>
+          <div class="price">49€<span>/mois</span></div>
+          <ul>
+            <li><i class="fas fa-check"></i> Scans illimités</li>
+            <li><i class="fas fa-check"></i> Support prioritaire</li>
+            <li><i class="fas fa-check"></i> 5 utilisateurs</li>
+            <li><i class="fas fa-check"></i> Analytics avancées</li>
+          </ul>
+          <button class="plan-btn">Choisir</button>
+        </div>
+        <div class="pricing-card">
+          <h3>Enterprise</h3>
+          <div class="price">99€<span>/mois</span></div>
+          <ul>
+            <li><i class="fas fa-check"></i> Tout illimité</li>
+            <li><i class="fas fa-check"></i> Support 24/7</li>
+            <li><i class="fas fa-check"></i> Utilisateurs illimités</li>
+            <li><i class="fas fa-check"></i> API personnalisée</li>
+          </ul>
+          <button class="plan-btn">Contacter</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  
+  <div class="google-login-container">
+    <button class="google-btn" onclick="window.location.href='/auth/google'">
+   
+      <img src="/images/chrome.png" alt="Google logo">
+      
+      Connexion avec Google
+    </button>
+  </div>
+  
+  <form class="contact-form">
+    <h3>Contactez-nous</h3>
+    <div class="form-group">
+      <input type="text" placeholder="Votre nom" required>
+    </div>
+    <div class="form-group">
+      <input type="email" placeholder="Votre email" required>
+    </div>
+    <div class="form-group">
+      <textarea placeholder="Votre message" rows="4" required></textarea>
+    </div>
+    <button type="submit" class="submit-btn">Envoyer</button>
+  </form>
+
+
+  <section class="how-it-works">
+    <h2>Comment ça marche ?</h2>
+    <div class="video-container">
+      <div class="video-wrapper">
+        <iframe 
+          src="https://www.youtube.com/embed/YOUR_VIDEO_ID" 
+          title="Comment utiliser QR Chat Assistant" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="social-links">
+      <a href="https://twitter.com/qrchatassistant" class="social-link">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="https://facebook.com/qrchatassistant" class="social-link">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://instagram.com/qrchatassistant" class="social-link">
+        <i class="fab fa-instagram"></i>
+      </a>
+    </div>
+  </footer>
+  
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Create floating elements
+    const floatingElements = document.querySelector('.floating-elements');
+    for (let i = 0; i < 15; i++) {
+      const element = document.createElement('div');
+      element.className = 'floating-element';
+      element.style.left = `${Math.random() * 100}%`;
+      element.style.top = `${Math.random() * 100}%`;
+      element.style.animationDuration = `${Math.random() * 20 + 10}s`;
+      element.style.animationDelay = `-${Math.random() * 20}s`;
+      floatingElements.appendChild(element);
+    }
+  
+    const sections = document.querySelectorAll('section');
+    const dotsContainer = document.createElement('div');
+    dotsContainer.className = 'dots-nav';
+  
+    sections.forEach((section, index) => {
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      dot.addEventListener('click', () => {
+        section.scrollIntoView({ behavior: 'smooth' });
+      });
+      dotsContainer.appendChild(dot);
+    });
+  
+    document.body.appendChild(dotsContainer);
+  
+    // Update active dot on scroll
+    window.addEventListener('scroll', () => {
+      const currentPos = window.pageYOffset;
+      sections.forEach((section, index) => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (currentPos >= sectionTop - sectionHeight / 3) {
+          document.querySelectorAll('.dot').forEach(dot => dot.classList.remove('active'));
+          document.querySelectorAll('.dot')[index].classList.add('active');
+        }
+      });
+    });
+  
+    // Parallax effect
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+      
+      document.querySelectorAll('.floating-element').forEach(element => {
+        const speed = Math.random() * 40 + 10;
+        element.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+      });
+  
+      const content = document.querySelector('.content');
+      content.style.transform = `translate(${x * 20}px, ${y * 20}px) rotateX(${y * 10}deg) rotateY(${-x * 10}deg)`;
+    });
+  
+    // Enhanced parallax effect with rotation
+    document.addEventListener('mousemove', (e) => {
+      const features = document.querySelectorAll('.feature');
+      const mouseX = e.clientX / window.innerWidth - 0.5;
+      const mouseY = e.clientY / window.innerHeight - 0.5;
+  
+      features.forEach(feature => {
+        const rect = feature.getBoundingClientRect();
+        const featureX = rect.left + rect.width / 2;
+        const featureY = rect.top + rect.height / 2;
+  
+        const deltaX = (featureX - e.clientX) * 0.01;
+        const deltaY = (featureY - e.clientY) * 0.01;
+  
+        feature.style.transform = `rotateX(${deltaY}deg) rotateY(${-deltaX}deg) translateZ(20px)`;
+      });
+    });
+  
+    // Form animations
+    const form = document.querySelector('.contact-form');
+    form.addEventListener('focus', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        e.target.parentElement.classList.add('focused');
+      }
+    }, true);
+  
+    form.addEventListener('blur', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        if (e.target.value === '') {
+          e.target.parentElement.classList.remove('focused');
+        }
+      }
+    }, true);
+  
+    // Add ripple effect to buttons
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', function(e) {
+        const x = e.clientX - e.target.offsetLeft;
+        const y = e.clientY - e.target.offsetTop;
+  
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+  
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+      });
+    });
+  
+    // Smooth scroll to pricing section
+    document.querySelector('.pricing-button').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelector('#pricing').scrollIntoView({ 
+        behavior: 'smooth'
+      });
+    });
+  
+    // Add Google login functionality
+    document.querySelector('.try-now-btn').addEventListener('click', () => {
+      // Hide all main content
+      document.querySelector('.hero-section').classList.add('hide');
+      document.querySelector('.pricing-section').classList.add('hide');
+      document.querySelector('.contact-form').classList.add('hide');
+      document.querySelector('.try-now-btn').classList.add('hide');
+      document.querySelector('.pricing-button').classList.add('hide');
+      
+      // Show Google login
+      document.querySelector('.google-login-container').style.display = 'block';
+      
+      // Add animation entrance effect
+      setTimeout(() => {
+        document.querySelector('.google-login-btn').style.transform = 'scale(1)';
+      }, 100);
+    });
+  });
+  </script>
+  </body>
+  </html>

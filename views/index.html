@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>D-ID Streaming POC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;700&display=swap" rel="stylesheet" />
+    <!-- Link to our external CSS file -->
+
+    <link rel="stylesheet" href="/css/styles.css" />
+
+</head>
+
+<body>
+<div id="content">
+    <div id="video-wrapper">
+        <div class="video-container">
+            <video id="talk-video" autoplay></video>
+        </div>
+    </div>
+    <br/>
+
+    <div id="input-container" style="text-align: left;">
+        <textarea id="user-input-field" placeholder="My name is Alpine and I am your Highland House FAQ assistant... 
+      How can I help you?"></textarea>
+        <div style="display: flex; justify-content: center;">
+            <input type="checkbox" id="toggleDID">
+            <label for="toggleDID">Send to DID</label>
+        </div>
+    </div>
+    <!-- OPTIONAL - SEE BELOW -->
+    <div>
+        <input type="checkbox" id="toggleReadAloud" checked>
+        <label for="toggleReadAloud">Read Responses Aloud ('esc' to stop)</label>
+    </div>
+    <div style="height: 1em;"></div>
+</div>
+
+<div id="buttons">
+    <button id="connect-button" type="button">Commencer</button>
+    <button id="voice-typing-button" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+    </button>
+    <button id="talk-button" type="button">Envoyer</button>
+</div>
+
+<!--<div id="buttons">
+    <button id="connect-button" type="button">Connect</button>
+    <button id="voice-typing-button" type="button">Voice Typing</button>
+    <button id="replay-button" type="button">Replay Audio Response</button>
+    <button id="talk-button" type="button">Chat</button>
+</div>-->
+
+<textarea id="response-container" rows="5"></textarea>
+
+<div id="status">
+    ICE gathering status: <span id="ice-gathering-status-label"></span><br/>
+    ICE status: <span id="ice-status-label"></span><br/>
+    Peer connection status: <span id="peer-status-label"></span><br/>
+    Signaling status: <span id="signaling-status-label"></span><br/>
+    Streaming status: <span id="streaming-status-label"></span><br/>
+</div>
+
+<script>
+
+
+
+ // Fonction pour ajuster la hauteur du champ de texte en fonction du contenu
+ document.getElementById('user-input-field').addEventListener('input', function () {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+  });
+
+  // Fonction pour effacer le champ de saisie lorsque l'utilisateur clique dessus
+  document.getElementById('user-input-field').addEventListener('click', function () {
+      this.value = ''; // Efface le champ de saisie
+      this.style.height = 'auto'; // Réinitialise la hauteur
+  });
+
+  // Fonction pour convertir les URL en liens cliquables
+  function linkify(text) {
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      return text.replace(urlRegex, function (url) {
+          return `<a href="${url}" target="_blank">${url}</a>`; // Ouvre les liens dans un nouvel onglet
+      });
+  }
+
+  // Vérifie si l'API de reconnaissance vocale est disponible
+  if ('webkitSpeechRecognition' in window) {
+    var recognition = new webkitSpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    // Écouteur pour le bouton de reconnaissance vocale (mousedown)
+    document.getElementById('voice-typing-button').addEventListener('mousedown', function() {
+        recognition.start();
+        this.style.background = '#ff0000';
+    });
+
+    // Écouteur pour le bouton de reconnaissance vocale (mouseup)
+    document.getElementById('voice-typing-button').addEventListener('mouseup', function() {
+        recognition.stop();
+        this.style.background = '#3312d6';
+        // Déclenche automatiquement l'envoi après la reconnaissance
+        setTimeout(() => {
+            document.getElementById('talk-button').click();
+        }, 500);
+    });
+
+    // Gestionnaire pour l'événement 'onend' de la reconnaissance vocale
+    recognition.onend = function() {
+        document.getElementById('voice-typing-button').style.background = '#3312d6';
+    };
+
+    // Gestionnaire pour l'événement 'onresult' de la reconnaissance vocale
+    recognition.onresult = function (event) {
+        var final_transcript = '';
+        for (var i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+                final_transcript += event.results[i][0].transcript;
+            }
+        }
+        document.getElementById('user-input-field').value = final_transcript;
+    };
+  } else {
+    alert("Web Speech API is not supported in this browser.");
+  }
+
+  // Écouteur pour annuler la synthèse vocale si la touche "Échap" est pressée
+  document.addEventListener('keydown', (event) => {
+      if (event.key === "Escape") {
+          window.speechSynthesis.cancel();
+          console.log("Speech synthesis cancelled.");
+      }
+  });
+</script>
+
+<script type="module" src="/js/streaming-client-api.js"></script>
+<script type="module" src="/js/langindex.js"></script>
+
+
+
+
+</body>
+</html>

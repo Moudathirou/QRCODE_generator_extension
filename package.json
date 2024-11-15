@@ -1,0 +1,30 @@
+{
+  "name": "avatar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@huggingface/inference": "^2.8.1",
+    "@langchain/community": "^0.3.13",
+    "@langchain/groq": "^0.1.2",
+    "base-64": "^1.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "http-proxy-middleware": "^3.0.3",
+    "langchain": "^0.3.5",
+    "mysql2": "^3.11.4",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
+}
